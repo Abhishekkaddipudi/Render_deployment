@@ -1,6 +1,6 @@
 from flask import Flask, send_file, request
-from PIL import Image, ImageDraw, ImageFont
-import os
+from PIL import Image, ImageDraw
+
 from datetime import datetime
 
 app = Flask(__name__)
@@ -24,8 +24,8 @@ def age_image():
 
     # Calculate text position
     text = f"{age}"
-    text_width, text_height = draw.textsize(text)
-    position = ((width - text_width) / 2, (height - text_height) / 2)
+    text_bbox = draw.textbbox((0, 0), text)
+    position = ((width - (text_bbox[2] - text_bbox[0])) / 2, (height - (text_bbox[3] - text_bbox[1])) / 2)
 
     # Draw text on image
     draw.text(position, text, fill=text_color, )
