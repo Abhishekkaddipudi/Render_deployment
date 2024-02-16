@@ -15,7 +15,7 @@ def age_image():
 
     # Create a blank image with white background
     width, height = 21, 21
-    img = Image.new('RGBA', (width, height), (0, 0, 0, 0))
+    img = Image.new('RGBA', (width, height), (255, 255, 255, 255))
     draw = ImageDraw.Draw(img)
 
     # Define font and text color
