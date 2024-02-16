@@ -1,27 +1,29 @@
 from flask import Flask, send_file, request
 from PIL import Image, ImageDraw, ImageFont
 import os
+from datetime import datetime
 
 app = Flask(__name__)
 
-@app.route('/age_image', methods=['GET'])
+@app.route('/year', methods=['GET'])
 def age_image():
-    age = request.args.get('age', type=int)
-    if age is None:
-        return 'Please provide an age parameter in the URL', 400
+    year = request.args.get('year', type=int)
+    if year is None:
+        return 'Please provide an year parameter in the URL', 400
+    age=get_age(year)
 
     # Create a blank image with white background
-    width, height = 200, 100
+    width, height = 21, 21
     background_color = (255, 255, 255)
     img = Image.new('RGB', (width, height), background_color)
     draw = ImageDraw.Draw(img)
 
     # Define font and text color
-    font = ImageFont.truetype(os.path.join("fonts", "arial.ttf"), 36)
+    font = ImageFont.truetype(os.path.join("fonts", "arial.ttf"), 16)
     text_color = (0, 0, 0)
 
     # Calculate text position
-    text = f"Age: {age}"
+    text = f"{age}"
     text_width, text_height = draw.textsize(text, font=font)
     position = ((width - text_width) / 2, (height - text_height) / 2)
 
@@ -34,6 +36,22 @@ def age_image():
 
     # Return the image file as a response
     return send_file(img_path, mimetype='image/png')
+
+def get_age(year):
+    # Extract the "birthyear" parameter from the URL query string
+    birthyear_str=year
+    if not birthyear_str:
+        return """'error': 'Please provide a birthyear parameter as a four-digit number'"""
+
+    try:
+        birthyear = int(birthyear_str)
+    except ValueError:
+        return """'error': 'Invalid year format. Please provide a four-digit number.'"""
+
+    current_year = datetime.now().year
+    age = current_year - birthyear
+    
+    return  age
 
 if __name__ == '__main__':
     app.run(debug=True)
