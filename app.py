@@ -19,16 +19,16 @@ def age_image():
     draw = ImageDraw.Draw(img)
 
     # Define font and text color
-    font = ImageFont.truetype(os.path.join("fonts", "arial.ttf"), 16)
+   
     text_color = (0, 0, 0)
 
     # Calculate text position
     text = f"{age}"
-    text_width, text_height = draw.textsize(text, font=font)
+    text_width, text_height = draw.textsize(text)
     position = ((width - text_width) / 2, (height - text_height) / 2)
 
     # Draw text on image
-    draw.text(position, text, fill=text_color, font=font)
+    draw.text(position, text, fill=text_color, )
 
     # Save image to a temporary file
     img_path = 'temp_age_image.png'
