@@ -1,58 +1,62 @@
-from flask import Flask, send_file, request
+from flask import Flask, send_file, request, render_template
 from PIL import Image, ImageDraw
-
 from datetime import datetime
 import io
 
 app = Flask(__name__)
 
+@app.route('/')
+def home():
+    # This route serves the form to the user.
+    return render_template('index.html')
+
 @app.route('/year', methods=['GET'])
 def age_image():
+    # Extracts the year from the query parameter.
     year = request.args.get('year', type=int)
     if year is None:
-        return 'Please provide an year parameter in the URL', 400
-    age=get_age(year)
+        # If year is not provided or not convertible to int, return an error message.
+        return 'Please provide a year parameter in the URL', 400
+    
+    # Calculate age based on the provided year.
+    age = get_age(year)
 
-    # Create a blank image with white background
-    width, height = 21, 21
-    img = Image.new('RGBA', (width, height), (255, 255, 255, 255))
-    draw = ImageDraw.Draw(img)
-
-    # Define font and text color
-   
-    text_color = (0, 0, 0,255)
-
-    # Calculate text position
-    text = f"{age}"
-    text_bbox = draw.textbbox((0, 0), text)
-    position = ((width - (text_bbox[2] - text_bbox[0])) / 2, (height - (text_bbox[3] - text_bbox[1])) / 2)
-
-    # Draw text on image
-    draw.text(position, text, fill=text_color, )
-
-    # Save image to a temporary file
+    # Create an image with the calculated age.
+    img = create_age_image(age)
+    
+    # Return the image file as a response.
     img_buffer = io.BytesIO()
     img.save(img_buffer, format='PNG')
     img_buffer.seek(0)
-
-    # Return the image file as a response
     return send_file(img_buffer, mimetype='image/png')
 
 def get_age(year):
-    # Extract the "birthyear" parameter from the URL query string
-    birthyear_str=year
-    if not birthyear_str:
-        return """'error': 'Please provide a birthyear parameter as a four-digit number'"""
-
     try:
-        birthyear = int(birthyear_str)
+        
+        birthyear = int(year)
     except ValueError:
-        return """'error': 'Invalid year format. Please provide a four-digit number.'"""
+        # This part of the code might not be reached due to the type=int in request.args.get,
+        # but it's here as a safeguard.
+        return 'Invalid year format. Please provide a four-digit number.'
+
 
     current_year = datetime.now().year
-    age = current_year - birthyear
-    
-    return  age
+
+    return current_year - birthyear
+
+def create_age_image(age):
+    # Create a blank image with white background.
+    width, height = 21, 21  # Adjusted for better visibility.
+    img = Image.new('RGBA', (width, height), (255, 255, 255, 255))
+    draw = ImageDraw.Draw(img)
+    text_color = (0, 0, 0, 255)
+    if age < 1 and age > datetime.now().year:
+        return "Invalid year"
+    text = f"{age}"
+    # Use a simpler approach for text position since dynamic calculation might not be necessary for simple use cases.
+    position = (width // 4, height // 4)  # Adjust as needed for text alignment.
+    draw.text(position, text, fill=text_color)
+    return img
 
 if __name__ == '__main__':
     app.run(debug=True)

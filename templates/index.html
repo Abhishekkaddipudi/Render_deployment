@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        h1 {
+            color: #333;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+        .container {
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <p></p>
+        <img src="https://private-user-images.githubusercontent.com/65544284/302568533-bb9249d3-60be-438d-b75b-3df6ddf37ede.gif?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MDg2ODcwNTQsIm5iZiI6MTcwODY4Njc1NCwicGF0aCI6Ii82NTU0NDI4NC8zMDI1Njg1MzMtYmI5MjQ5ZDMtNjBiZS00MzhkLWI3NWItM2RmNmRkZjM3ZWRlLmdpZj9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNDAyMjMlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjQwMjIzVDExMTIzNFomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWEzOTZlOGVjOTI3YmE1Y2JmY2U5YjhmOGEyOGFlZWNhYmJlNDc1ZTZkNDNiYmIyN2E1ZDBmOWIwZDQ2Y2NlMmQmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JmFjdG9yX2lkPTAma2V5X2lkPTAmcmVwb19pZD0wIn0.aKNtVcSBAEIa0O5gV7T70cIdpuparMY7A2Q-LkiJfeQ" alt="Welcome Image" height="50%" width="50%">
+        <!-- Replace 'your-image-url-here.jpg' with your actual image URL -->
+    </div>
+    <h1>Find Out How Old You Are</h1>
+    <form action="/year" method="get">
+        <label for="year">Enter your birth year:</label>
+        <input type="number" id="year" name="year" required>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
