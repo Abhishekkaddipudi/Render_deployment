@@ -1,4 +1,4 @@
-from flask import Flask, send_file, request, render_template,jsonify
+from flask import Flask, send_file, request, render_template,redirect, url_for,jsonify
 from PIL import Image, ImageDraw
 from datetime import datetime
 import io
@@ -22,10 +22,22 @@ def send_message():
     message = request.form['message']
     if username and message:
         messages.append({'username': username, 'message': message})
-        socketio.emit('new_message', {'username': username, 'message': message})
-        return jsonify({'success': True})
-    else:
-        return jsonify({'success': False, 'error': 'Username and message are required'})
+    return redirect(url_for('index'))
+@app.route('/messages')
+def get_messages():
+    return jsonify(messages)
+
+@app.route('/clear_messages', methods=['POST'])
+def clear_messages():
+    global messages
+    messages = []
+    return jsonify({'success': True})
+
+@app.route('/clear_memory', methods=['POST'])
+def clear_memory():
+    global messages
+    messages = []
+    return redirect(url_for('index'))
 
 @app.route('/year', methods=['GET'])
 def age_image():
