@@ -2,10 +2,10 @@ from flask import Flask, send_file, request, render_template,redirect, url_for,j
 from PIL import Image, ImageDraw
 from datetime import datetime
 import io
-from flask_socketio import SocketIO
+
 
 app = Flask(__name__)
-socketio = SocketIO(app)
+
 messages = []
 @app.route('/')
 def home():
@@ -88,4 +88,4 @@ def create_age_image(age):
     return img
 
 if __name__ == '__main__':
-    socketio.run(app, debug=True,host='0.0.0.0')
+    app.run(app, debug=True,host='0.0.0.0')
