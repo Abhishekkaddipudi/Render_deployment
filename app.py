@@ -1,14 +1,31 @@
-from flask import Flask, send_file, request, render_template
+from flask import Flask, send_file, request, render_template,jsonify
 from PIL import Image, ImageDraw
 from datetime import datetime
 import io
+from flask_socketio import SocketIO
 
 app = Flask(__name__)
-
+socketio = SocketIO(app)
+messages = []
 @app.route('/')
 def home():
     # This route serves the form to the user.
     return render_template('index.html')
+
+@app.route('/chat')
+def index():
+    return render_template('chat.html', messages=messages)
+
+@app.route('/send_message', methods=['POST'])
+def send_message():
+    username = request.form['username']
+    message = request.form['message']
+    if username and message:
+        messages.append({'username': username, 'message': message})
+        socketio.emit('new_message', {'username': username, 'message': message})
+        return jsonify({'success': True})
+    else:
+        return jsonify({'success': False, 'error': 'Username and message are required'})
 
 @app.route('/year', methods=['GET'])
 def age_image():
@@ -59,4 +76,4 @@ def create_age_image(age):
     return img
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    socketio.run(app, debug=True,host='0.0.0.0')
