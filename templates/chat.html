@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flask Chat</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
     <div class="container mt-5">
@@ -29,9 +30,24 @@
             $.get('/messages', function(messages) {
                 $('#message-display').empty();
                 messages.forEach(function(message) {
-                    $('#message-display').append('<p><strong>' + message.username + ':</strong> ' + message.message + '</p>');
+                    var messageElement = $('<p><strong>' + message.username + ':</strong> ' + message.message + ' <i class="fas fa-copy copy-icon" title="Copy"></i></p>');
+                    messageElement.find('.copy-icon').click(function() {
+                        copyMessage(message.message);
+                    });
+                    $('#message-display').append(messageElement);
                 });
             });
+        }
+
+        function copyMessage(text) {
+            // Create a textarea element to hold the text temporarily
+            var textarea = $('<textarea>').val(text).appendTo('body').select();
+            // Copy the selected text
+            document.execCommand('copy');
+            // Remove the textarea from the DOM
+            textarea.remove();
+            // Alert the user that the text has been copied (optional)
+            alert('Message copied to clipboard: ' + text);
         }
 
         $(document).ready(function() {
